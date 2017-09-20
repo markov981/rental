@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Apartments</title>
+</head>
+
+<body>
+	<h1>Apartment Apartment</h1>
+	
+	<h1>Only ${{ apartment.rent }}</h1>
+	<p>
+	  {{ apartment.address }}<br>
+	  {{ apartment.city }}, {{ apartment.state }} {{ apartment.zipCode }}
+	</p>
+	
+	<dl>
+	  <dt>Number of bedrooms</dt>
+	  	<dd>{{ apartment.numberOfBedrooms }}</dd>
+	  <dt>Number of bathrooms</dt>
+	  	<dd>{{ apartment.numberOfBathrooms }}</dd>
+	  <dt>Square footage</dt>
+	  	<dd>{{ apartment.squareFootage }}</dd>
+	</dl>
+
+</body>
+</html>
