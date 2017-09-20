@@ -1,6 +1,10 @@
 package com.libertymutual.goforcode.spark.app.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.javalite.activejdbc.Base;
+import org.javalite.activejdbc.Model;
 import org.mindrot.jbcrypt.BCrypt;
 
 import com.libertymutual.goforcode.spark.app.model.User;
@@ -15,7 +19,9 @@ public class SessionController {
 	
 
 	public static final Route newForm = (Request req, Response res) -> {
-		return MustacheRenderer.getInstance().render("session/newForm.html", null);
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("returnPath", req.queryParams("returnPath"));
+		return MustacheRenderer.getInstance().render("session/newForm.html", model);	
 	};
 	
 	// create a new session, not the user - login, not signup
@@ -30,7 +36,7 @@ public class SessionController {
 			req.session().attribute("currentUser", user);
 		 }
 		}		
-		res.redirect("/");		
+		res.redirect(req.queryParamOrDefault("returnPath", "/"));		
 		return "";         
 	};	
 }

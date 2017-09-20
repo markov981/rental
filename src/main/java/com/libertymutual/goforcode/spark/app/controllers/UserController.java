@@ -28,16 +28,13 @@ public class UserController {
 	  );
 	 
 	  try (AutoCloseableDb db = new AutoCloseableDb()) {
+		   // User.deleteAll();		  
 			 user.saveIt();
 			 req.session().attribute("currentUser", user);
-			 res.redirect("/"); ////
+			 res.redirect("/"); 
 			 return "";
 	}
-		///// user[email] - 4
-	  // http://localhost:4567/api/apartments/34 
-		
-	  
-	  
+		  
 //	req.queryMap("user")
 //		.toMap()
 //		.entrySet()
@@ -47,5 +44,8 @@ public class UserController {
 //		User user = new User();
 	};
 	
+///// user[email] - 4
+	  // http://localhost:4567/api/apartments/34 
+			
 	
 }
