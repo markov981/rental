@@ -78,7 +78,7 @@ public class ApartmentController {
 				req.queryParams("address"), 
 				req.queryParams("city"),
 				req.queryParams("state"),
-				req.queryParams("zip_code"),	
+				req.queryParams("zipCode"),	
 				true
 			  );
 			 
