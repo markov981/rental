@@ -2,25 +2,65 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Apartments</title>
+<title>Apartment Details</title>
 </head>
 
 <body>
-	<h1>Apartment Apartment</h1>
+
+	{{> /common/_navigation }}
 	
-	<h1>Only ${{ apartment.rent }}</h1>
+	<h1>Apartment Details</h1>
+	
+	
+    {{#noUser}}
+       <a href="/login">Login to LIKE this apartment</a>
+    {{/noUser}}
+   
+   
+    {{#loggedNotlikedNolister}}
+	    <form method="post" action="/apartments/{{ apartment.id }}/likes">
+	       <button>Like this apartment</button>
+	    </form>
+    {{/loggedNotlikedNolister}} 
+ 
+
+    {{#loggedListed}}
+		 {{#usersWhoLiked}}
+		 	<div>{{ user.firstName }} ... {{ user.lastName }}</div>
+		 {{/usersWhoLiked}}
+
+
+		 {{#isActive}}		 	
+			<form method="post" action="/apartments/{{ apartment.id }}/deactivations">
+		       <button>Deacivate listing</button>
+		    </form>	    
+		 {{/isActive}}		 
+		 		 
+		 {{#isNotActive}}
+			<form method="post" action="/apartments/{{ apartment.id }}/deactivations">
+		       <button>Activate listing</button>
+		    </form>		 
+		 {{/isNotActive}}		 
+			 	 
+    {{/loggedListed}} 
+	
+	
+	
 	<p>
-	  {{ apartment.address }}<br>
-	  {{ apartment.city }}, {{ apartment.state }} {{ apartment.zipCode }}
+	  {{ apartment.rent }}
+	</p>
+	<p>
+	  {{ apartment.address }}
+	  {{ apartment.city }}, {{ apartment.state }} {{ apartment.zip_code }}
 	</p>
 	
 	<dl>
 	  <dt>Number of bedrooms</dt>
-	  	<dd>{{ apartment.numberOfBedrooms }}</dd>
+	  	<dd>{{ apartment.number_of_bedrooms }}</dd>
 	  <dt>Number of bathrooms</dt>
-	  	<dd>{{ apartment.numberOfBathrooms }}</dd>
+	  	<dd>{{ apartment.number_of_bathrooms }}</dd>
 	  <dt>Square footage</dt>
-	  	<dd>{{ apartment.squareFootage }}</dd>
+	  	<dd>{{ apartment.square_footage }}</dd>
 	</dl>
 
 </body>

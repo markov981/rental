@@ -1,13 +1,15 @@
 package com.libertymutual.goforcode.spark.app.model;
 
 
+
 import org.javalite.activejdbc.Model;
 
 public class Apartment extends Model {
 
 	public Apartment() {}
 
-	public Apartment(int rent, int numberOfBedrooms, double numberOfBathrooms, int squareFootage, String address, String city, String state, String zipCode) {
+	public Apartment(int rent, int numberOfBedrooms, double numberOfBathrooms, int squareFootage, String address, 
+			         String city, String state, String zipCode, boolean isActive) {
 		setRent(rent);
 		setNumberOfBedrooms(numberOfBedrooms);
 		setNumberOfBathrooms(numberOfBathrooms);
@@ -16,12 +18,24 @@ public class Apartment extends Model {
 		setCity(city);
 		setState(state);
 		setZipCode(zipCode);
+		
+		setIsActive(isActive);
 	}
 
+	
+	public boolean getIsActive() {
+		return getBoolean("is_active");
+	}	
+	public void setIsActive(boolean isActive) {
+		set("is_active", isActive);
+	}
+
+	
+	
+	
 	public int getRent() {
 		return getInteger("rent");
 	}
-
 	public void setRent(int rent) {
 		set("rent", rent);
 	}
@@ -29,7 +43,6 @@ public class Apartment extends Model {
 	public int getNumberOfBedrooms() {
 		return getInteger("number_of_bedrooms");
 	}
-
 	public void setNumberOfBedrooms(int numberOfBedrooms) {
 		set("number_of_bedrooms", numberOfBedrooms);
 	}

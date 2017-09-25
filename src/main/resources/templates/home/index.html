@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Your New Home!</title>
+	<meta charset="UTF-8">
+	<title>Your New Home!</title>
 </head>
+
 <body>
-
-	<a href = "/apartments/new">List a new apartment...</a>
-
-	{{#noUser}}
-		<a href="/login">Login</a>
-	{{/noUser}}
+	{{> /common/_navigation }}
 	
-	{{#currentUser}}
-		Welcome, {{ currentUser.email }}
-	{{/currentUser}}
-
-
-	<h1>Apartments</h1>	
+	<h1>Apartments!</h1>	
 	
-	{{#apartments}}  
+	{{#apartmentsActive}}  
 		<div>
-			<a href="/apartments/{{ id }}">{{ address }}</a>
+			<a href="/apartments/{{ id }}">{{ address }} --- 
+											{{ rent }}          {{ numberOfBathrooms }}    {{ numberOfBedrooms }}
+											{{ squareFootage }} {{ address }} {{ city }}   {{ state }}  {{ zipCode }}																				
+			</a>
+			<br>
+			{{#noUser}}
+			    <a href="/login">Login to LIKE apartment</a>
+			{{/noUser}}
 		</div>	
-	{{/apartments}}
+		<br>
+	{{/apartmentsActive}}
 
 </body>
 </html>

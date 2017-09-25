@@ -1,28 +1,35 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>New apartment</title>
-</head>
+	<head>
+		<meta charset="UTF-8">
+		<title>New apartment</title>
+	</head>
+
 <body>
+
+	{{> /common/_navigation }}
 				
 	<form method="post" action="/apartments">
 	
+	  <a href = "/apartments/mine">Your listings</a>
+	  <a href = "/apartments/new">Add a listing</a>
+	  <button href = "/logout">Logout</button> 
+	
 	  <input type="number"  step = "0.5"  		name="rent"     			 placeholder="rent"     			required>
 	  <br>
-	  <input type="number"  step = "0.5" 		name="numberOfBedrooms"  	 placeholder="numberOfBedrooms"  	required>
+	  <input type="number"  step = "0.5" 		name="number_of_bedrooms"  	 placeholder="numberOfBedrooms"  	required>
 	  <br>
-	  <input type="number"  step = "0.5"   		name="numberOfBathrooms"     placeholder="numberOfBathrooms"  	required>
+	  <input type="number"  step = "0.5"   		name="number_of_bathrooms"   placeholder="numberOfBathrooms"  	required>
 	  <br>
-	  <input type="number" 	step = "0.5"  		name="squareFootage"      	 placeholder="squareFootage"  		required>
+	  <input type="number" 	step = "0.5"  		name="square_footage"      	 placeholder="squareFootage"  		required>
 	  <br>
-	  <input type="text" 	name="address"  		placeholder="address"  	required>
+	  <input type="text" 	name="address"  								 placeholder="address"  			required>
 	  <br>
-	  <input type="text"    name="city"     		placeholder="city"  	required>
+	  <input type="text"    name="city"     								 placeholder="city"  				required>
 	  <br>
-	  <input type="text" 	name="state"      		placeholder="state"  	required>
+	  <input type="text" 	name="state"      								 placeholder="state"  				required>
 	  <br>	  
-	  <input type="text" 	name="zipCode"      	placeholder="zipCode"  	required>
+	  <input type="text" 	name="zip_code"      							 placeholder="ZIP"  			    required>
 	  <br>	  	  
 	  <button>Add listing</button>
 	</form>

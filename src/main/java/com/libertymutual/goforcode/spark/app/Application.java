@@ -26,40 +26,50 @@ public class Application {
 	    // create a user
 		try (AutoCloseableDb db = new AutoCloseableDb()) {
 			User.deleteAll();
-			new User ("alex", "alex", "alex@alex.com", encryptedPassword).saveIt();	
-			
+			User alex = new User ("alex", "alex", "alex@alex.com", encryptedPassword);
+			alex.saveIt();	
+					
 			Apartment.deleteAll();
-            new Apartment(6200, 2, 0d, 350, "123 Main St", "San Francisco", "CA", "95125").saveIt();
-            new Apartment(1200, 4, 6d, 4000, "789 Hillcrest Drive", "Manchester", "NH", "03104").saveIt();
-            new Apartment(1459, 3, 6d, 4000, "456 Cowboy Way", "Houston", "TX", "77006").saveIt();		
+			Apartment apartment = new Apartment(6200, 2, 1d, 350, "123 Main St", "San Francisco", "CA", "95125", true);
+			apartment.saveIt();                
+			alex.add(apartment);   
+			
+			apartment = new Apartment(1200, 4, 6d, 4000, "789 Hillcrest Drive", "Manchester", "NH", "03104", true);
+			apartment.saveIt();
+			alex.add(apartment);   
+			
 		}
 		
 		path("/apartments", () -> {
+			
 			//  protect /new path   regardless of 'before' position on the page   Filter 2nd arg
-			before("/new",   SecurityFilters.isAuthenticated); 
-			
-			// the order matters: ':id' is a placeholder = '*' that will accept 'new' as an id - put the most specific first in that list
-			get("/new",  ApartmentController.newForm);
-			get("/:id",  ApartmentController.details);
-			
-			before("",   SecurityFilters.isAuthenticated); 					
-			post("", 	 ApartmentController.create);
+			// the order matters: ':id' is a placeholder = '*' that will accept 'new' as an id - put the most specific first in that list			
+			before("/new",    			SecurityFilters.isAuthenticated); 
+				get("/new",  				ApartmentController.newForm);
+			before("/mine",   			SecurityFilters.isAuthenticated); 
+				get("/mine", 				ApartmentController.index);		
+				get("/:id",  				ApartmentController.details);				
+				get("/:id/activations",  	ApartmentController.activate);
+				get("/:id/deactivations",  	ApartmentController.deactivate);
+			before("",   	  			SecurityFilters.isAuthenticated); 
+			    post("/:id/likes", 	 		ApartmentController.likes);
+				post("", 	 				ApartmentController.create);
+			    
 		});
 		
 		
 		get("/",                HomeController.index);			
 		get("/login", 			SessionController.newForm);
 		post("/login", 			SessionController.create);
-		get("/signup", 		    UserController.newForm);
-		post("/signup", 		    UserController.create);
+		post("/logout", 		SessionController.logout);
+		get("/users/new", 		UserController.newForm);
+		post("/users", 			UserController.create);
 		
 		
 		path("/api", () -> {
 			get("/apartments/:id", ApartmentApiController.details);      
 			post("/apartments",    ApartmentApiController.create);
 			post("/signup", 	   UserApiController.create);
-			
-			
 		});
 	}
 }

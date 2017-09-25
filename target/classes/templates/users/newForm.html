@@ -4,18 +4,20 @@
 <meta charset="UTF-8">
 <title>Who are you?</title>
 </head>
+
 <body>
+	{{> /common/_navigation }}
 				
-	<form method="post" action="/signup">
-	  <input type="email"    name="email"     		placeholder="email"     required>
+	<form method="post" action="/users">
+	  <input type="email"    	name="email"     		placeholder="email"     required>
 	  <br>
-	  <input type="password" name="password"  		placeholder="password"  required>
+	  <input type="password" 	name="password"  		placeholder="password"  required>
 	  <br>
-	  <input type="lastName"    name="lastName"     placeholder="lastName"  required>
+	  <input type="text"    	name="last_name"     	placeholder="lastName"  required>
 	  <br>
-	  <input type="firstName" name="firstName"      placeholder="firstName"  required>
+	  <input type="text" 		name="first_name"      	placeholder="firstName"  required>
 	  <br>
-	  <button>Signup</button>
+	  <button>Sign up</button>
 	</form>
 		
 </body>

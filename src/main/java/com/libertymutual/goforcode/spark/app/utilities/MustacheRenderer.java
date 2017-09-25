@@ -1,7 +1,6 @@
 package com.libertymutual.goforcode.spark.app.utilities;
 
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.github.mustachejava.DefaultMustacheFactory;

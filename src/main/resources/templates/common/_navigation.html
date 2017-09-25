@@ -1,0 +1,19 @@
+<div>
+
+  {{#currentUser}}
+    <form action="/logout" method="post"> 
+           
+		<a href = "/apartments/mine">Your listings</a>
+		<a href = "/apartments/new">Add a listing</a>
+		<button href = "/logout">Logout</button>  
+			      
+    </form>      
+  {{/currentUser}}
+  
+    
+  {{#noUser}}
+    <a href="/login">Login</a>
+    <a href="/users/new">Sign up</a>
+  {{/noUser}}
+  
+</div>

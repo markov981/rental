@@ -7,45 +7,32 @@ import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import static spark.Spark.*;
-
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserController {
-	
+
 	// will handle get request
 	public static final Route newForm = (Request req, Response res) -> {
-		return MustacheRenderer.getInstance().render("users/newForm.html", null);		
+		Map<String, Object> model = new HashMap<String, Object>(); 			 // BF
+		model.put("noUser", req.session().attribute("currentUser") == null); // BF
+		model.put("currentUser", req.session().attribute("currentUser"));
+
+		return MustacheRenderer.getInstance().render("users/newForm.html", model);
 	};
-	
+
 	// will handle post request
-	public static final Route create = (Request req, Response res) -> {	
-	 String encryptedPassword = BCrypt.hashpw(req.queryParams("password"), BCrypt.gensalt());	
-	 User user = new User (
-		req.queryParams("email"),
-		encryptedPassword, 
-		req.queryParams("firstName"),
-		req.queryParams("lastName")	
-	  );
-	 
-	  try (AutoCloseableDb db = new AutoCloseableDb()) {
-		   // User.deleteAll();		  
-			 user.saveIt();
-			 req.session().attribute("currentUser", user);
-			 res.redirect("/"); 
-			 return "";
-	}
-		  
-//	req.queryMap("user")
-//		.toMap()
-//		.entrySet()
-//		.stream()
-//		.map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue()[0]));	
-//		.collect(Collectors.toMap(entry-> entry.getKey(), entry.getValue());
-//		User user = new User();
+	public static final Route create = (Request req, Response res) -> {
+		String encryptedPassword = BCrypt.hashpw(req.queryParams("password"), BCrypt.gensalt());
+		User user = new User(req.queryParams("first_name"), req.queryParams("last_name"), req.queryParams("email"), encryptedPassword);
+		try (AutoCloseableDb db = new AutoCloseableDb()) {
+			user.saveIt();
+			Map<String, Object> model = new HashMap<String, Object>(); 	
+			model.put("currentUser",  req.session().attribute("currentUser"));			
+			req.session().attribute("currentUser", user);
+			res.redirect("/");
+			return "";
+		}
+
 	};
-	
-///// user[email] - 4
-	  // http://localhost:4567/api/apartments/34 
-			
-	
 }
