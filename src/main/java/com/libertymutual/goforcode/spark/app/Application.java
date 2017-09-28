@@ -5,6 +5,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import com.libertymutual.goforcode.spark.app.controllers.ApartmentApiController;
 import com.libertymutual.goforcode.spark.app.controllers.ApartmentController;
 import com.libertymutual.goforcode.spark.app.controllers.HomeController;
+import com.libertymutual.goforcode.spark.app.controllers.SessionApiController;
 import com.libertymutual.goforcode.spark.app.controllers.SessionController;
 import com.libertymutual.goforcode.spark.app.controllers.UserApiController;
 import com.libertymutual.goforcode.spark.app.controllers.UserController;
@@ -39,6 +40,15 @@ public class Application {
 			alex.add(apartment);   
 			
 		}
+	
+			    
+				// one origin & all methods and options, "localhost:4200" - lock it down to
+				enableCORS("http://localhost:4200", "*", "*");
+				
+				
+				// before(request, response)
+		
+		
 		
 		path("/apartments", () -> {
 			
@@ -67,9 +77,53 @@ public class Application {
 		
 		
 		path("/api", () -> {
-			get("/apartments/:id", ApartmentApiController.details);      
-			post("/apartments",    ApartmentApiController.create);
-			post("/signup", 	   UserApiController.create);
+			get("/apartments/mine",  ApartmentApiController.mine);
+			get("/apartments/:id",   ApartmentApiController.details);
+			get("/apartments",       ApartmentApiController.index);
+			post("/apartments",      ApartmentApiController.create);
+			
+			//post("/signup", 	     UserApiController.create);
+			post("/sessions", 	     SessionApiController.create);
+			delete("/sessions/mine", SessionApiController.destroy);
 		});
 	}
+	
+	
+	
+	
+	// Enables CORS on requests. This method is an initialization method and should be called once.
+	private static void enableCORS(final String origin, final String methods, final String headers) {
+
+	    options("/*", (request, response) -> {
+	        String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+	        if (accessControlRequestHeaders != null) {
+	            response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+	        }
+
+	        String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+	        if (accessControlRequestMethod != null) {
+	            response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+	        }
+
+	        return "OK";
+	    });
+
+	    before((request, response) -> {
+	        response.header("Access-Control-Allow-Origin", origin);
+	        response.header("Access-Control-Request-Method", methods);
+	        response.header("Access-Control-Allow-Headers", headers);
+	        // This may or may not be necessary in your particular application
+//	        response.type("application/json");
+	        response.header("Access-Control-Allow-Credentials", "true");
+	    });
+	}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
