@@ -46,9 +46,8 @@ public class ApartmentApiController {
 			return apartments.toJson(true);
 			}
 		};
-		
-	
-		
+        
+        		
 		
 	public static final Route details = (Request req, Response res) -> {
 
@@ -80,7 +79,67 @@ public class ApartmentApiController {
 			 return apartment.toJson(true);
 		 }
 	};
-	
-	
+
+
+	public static final Route activate = (Request req, Response res) -> {
+			
+			// For non-authenticated
+			User currentUser = req.session().attribute("currentUser");
+			if(req.session().attribute("currentUser") == null) {			
+				res.redirect("/");
+				return "";
+			}		
+					 
+			try (AutoCloseableDb db = new AutoCloseableDb()) {									
+				String idAsString = req.params("id");
+				int id = Integer.parseInt(idAsString); 				  
+				Apartment apartment = Apartment.findById(id);
+				
+				System.out.println("ACTIVATE -------------> " + id);
+				
+				// If logged-in User ID == user_id of the Apartment selected --> user listed the apartment
+				User lister =  apartment.parent(User.class);                	
+				long listerUserId = (long) lister.getId();
+				long loggedUserId = (long) currentUser.getId();
+								 
+				if ( listerUserId == loggedUserId ) {       
+				    apartment.set("is_active", true);}
+
+				apartment.saveIt();	
+				res.header("Content-Type", "application/json");
+				return apartment.toJson(true);
+				}
+		};
+		
+	public static final Route deactivate = (Request req, Response res) -> {
+			
+			// For non-authenticated
+			User currentUser = req.session().attribute("currentUser");
+			if(req.session().attribute("currentUser") == null) {			
+				res.redirect("/");
+				return "";
+			}		
+					 
+			try (AutoCloseableDb db = new AutoCloseableDb()) {									
+				String idAsString = req.params("id");
+				int id = Integer.parseInt(idAsString); 				  
+				Apartment apartment = Apartment.findById(id);
+				
+				System.out.println("Deactivate -------------> " + id);
+				
+				
+				// If logged-in User ID == user_id of the Apartment selected --> user listed the apartment
+				User lister =  apartment.parent(User.class);                	
+				long listerUserId = (long) lister.getId();
+				long loggedUserId = (long) currentUser.getId();
+								 
+				if ( listerUserId == loggedUserId ) {       
+				    apartment.set("is_active", false);}
+
+				apartment.saveIt();	
+				res.header("Content-Type", "application/json");
+				return apartment.toJson(true);
+				}
+		};	
 	
 }

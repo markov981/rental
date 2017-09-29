@@ -34,10 +34,27 @@ public class ApartmentController {
 			model.put("noUser", req.session().attribute("currentUser") == null); // BF
 			model.put("currentUser", req.session().attribute("currentUser"));
 			
+			
+			// 3rd condition - list of users who liked the apt
+			boolean loggedListed = false;
+			User currentUser = req.session().attribute("currentUser");
+			User lister = apartment.parent(User.class);  
+			
+			List<User> usersWhoLiked = apartment.getAll(User.class);		
+			model.put("usersWhoLiked", usersWhoLiked);
+			
+			if( req.session().attribute("currentUser") != null  && lister.getId().equals(currentUser.getId()) ) 
+				loggedListed = true;		
+			model.put("loggedListed", loggedListed); 
+					
+			model.put("isActive",     apartment.getIsActive());			
+			model.put("isNotActive", !apartment.getIsActive());				
+			
+			
 			// Display if: logged in && 
 			boolean loggedNotlikedNolister = false;
-			User currentUser = req.session().attribute("currentUser");
-			User lister = apartment.parent(User.class);  			 
+			// User currentUser = req.session().attribute("currentUser");
+			//User lister = apartment.parent(User.class);  			 
 
 			if (currentUser != null) {
 				List<Apartment> apartmentLiked = currentUser.get(Apartment.class, "id = ?", id);
@@ -82,7 +99,8 @@ public class ApartmentController {
 				true
 			  );
 			 
-			 User user = req.session().attribute("currentUser");    	  
+			 User user = req.session().attribute("currentUser"); 
+			 apartment.set("is_active", true);
 			 apartment.saveIt();
 			 user.add(apartment);		 
 			 res.redirect("/apartments/mine"); 
@@ -126,7 +144,10 @@ public class ApartmentController {
 			return "";
 		}		
 						
-		try (AutoCloseableDb db = new AutoCloseableDb()) {					
+		try (AutoCloseableDb db = new AutoCloseableDb()) {	
+			
+			
+			
 			String idAsString = req.params("id");
 			int id = Integer.parseInt(idAsString); 				  
 			Apartment apartment = Apartment.findById(id);
@@ -136,7 +157,7 @@ public class ApartmentController {
 			long loggedUserId = (long) currentUser.getId();
 							 
 			if ( listerUserId == loggedUserId ) {    // lister.getId().equals(currentUser.getId()    
-			    apartment.setIsActive(true);}
+			    apartment.set("is_active", true);}
 			
 			apartment.saveIt();	
 			currentUser.add(apartment);
@@ -148,14 +169,18 @@ public class ApartmentController {
 	
 	// De-activate apartment
 	public static final Route deactivate = (Request req, Response res) -> {
-		
+				
 		// For non-authenticated
 		User currentUser = req.session().attribute("currentUser");
 		if(req.session().attribute("currentUser") == null) {			
 			res.redirect("/");
 			return "";
 		}								
-		try (AutoCloseableDb db = new AutoCloseableDb()) {					
+		try (AutoCloseableDb db = new AutoCloseableDb()) {	
+			
+			System.out.println("DEACTIVATE -------------->");
+			
+			
 			String idAsString = req.params("id");
 			int id = Integer.parseInt(idAsString); 				  
 			Apartment apartment = Apartment.findById(id);
@@ -164,8 +189,9 @@ public class ApartmentController {
 			long listerUserId = (long) lister.getId();
 			long loggedUserId = (long) currentUser.getId();
 							 
-			if ( listerUserId == loggedUserId ) {    // lister.getId().equals(currentUser.getId()    
-			    apartment.setIsActive(false);}
+			//if ( listerUserId == loggedUserId ) {    // lister.getId().equals(currentUser.getId()    
+			    apartment.set("is_active", false);
+			    System.out.println("IF LOOP DEACTIVATE -------------->");//}
 			
 			apartment.saveIt();	
 			currentUser.add(apartment);

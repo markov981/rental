@@ -25,10 +25,11 @@
  
 
     {{#loggedListed}}
+   
 		 {{#usersWhoLiked}}
 		 	<div>{{ user.firstName }} ... {{ user.lastName }}</div>
 		 {{/usersWhoLiked}}
-
+   
 
 		 {{#isActive}}		 	
 			<form method="post" action="/apartments/{{ apartment.id }}/deactivations">
@@ -37,7 +38,7 @@
 		 {{/isActive}}		 
 		 		 
 		 {{#isNotActive}}
-			<form method="post" action="/apartments/{{ apartment.id }}/deactivations">
+			<form method="post" action="/apartments/{{ apartment.id }}/activations">
 		       <button>Activate listing</button>
 		    </form>		 
 		 {{/isNotActive}}		 

@@ -31,11 +31,11 @@ public class Application {
 			alex.saveIt();	
 					
 			Apartment.deleteAll();
-			Apartment apartment = new Apartment(6200, 2, 1d, 350, "123 Main St", "San Francisco", "CA", "95125", true);
+			Apartment apartment = new Apartment(6200, 2, 1d, 350, "123 Active St", "San Francisco", "CA", "95125", true);
 			apartment.saveIt();                
 			alex.add(apartment);   
 			
-			apartment = new Apartment(1200, 4, 6d, 4000, "789 Hillcrest Drive", "Manchester", "NH", "03104", true);
+			apartment = new Apartment(1200, 4, 6d, 4000, "789 False Drive", "Manchester", "NH", "03104", false);
 			apartment.saveIt();
 			alex.add(apartment);   
 			
@@ -59,11 +59,16 @@ public class Application {
 			before("/mine",   			SecurityFilters.isAuthenticated); 
 				get("/mine", 				ApartmentController.index);		
 				get("/:id",  				ApartmentController.details);				
-				get("/:id/activations",  	ApartmentController.activate);
-				get("/:id/deactivations",  	ApartmentController.deactivate);
+				post("/:id/activations",  	ApartmentController.activate);
+				post("/:id/deactivations",  ApartmentController.deactivate);
+		
+				
+				
 			before("",   	  			SecurityFilters.isAuthenticated); 
 			    post("/:id/likes", 	 		ApartmentController.likes);
 				post("", 	 				ApartmentController.create);
+				
+				// 
 			    
 		});
 		
@@ -79,6 +84,10 @@ public class Application {
 		path("/api", () -> {
 			get("/apartments/mine",  ApartmentApiController.mine);
 			get("/apartments/:id",   ApartmentApiController.details);
+			
+			post("/apartments/:id/activations", ApartmentApiController.activate);
+			post("/apartments/:id/deactivations", ApartmentApiController.deactivate);
+			
 			get("/apartments",       ApartmentApiController.index);
 			post("/apartments",      ApartmentApiController.create);
 			
